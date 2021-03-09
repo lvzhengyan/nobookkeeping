@@ -14,18 +14,18 @@ module.exports = {
             .include.add(dir)
             .end()
             // 使用的loader即loader的选项,chainwebpack中.use().loader()传入的内容都是一样的
-            .use('svg-sprite-loader-mod')
-            .loader('svg-sprite-loader-mod')
+            .use('svg-sprite-loader')
+            .loader('svg-sprite-loader')
             .options({ extract: false })
             .end()
             .use('svgo-loader')
             .loader('svgo-loader')
-            // .options({
-            //     plugins: [{ removeAttrs: { attrs: 'path:fill' } }]
-            // })
+            .options({
+                plugins: [{ removeAttrs: { attrs: 'path:fill' } }]
+            })
             .end();
 
-        config.plugin('svg-sprite').use(require('svg-sprite-loader-mod/plugin'), [{ plainSprite: true }]);
+        config.plugin('svg-sprite').use(require('svg-sprite-loader/plugin'), [{ plainSprite: true }]);
         // 这个目录下的文件的不再匹配svg规则
         config.module.rule('svg').exclude.add(dir);
     }
