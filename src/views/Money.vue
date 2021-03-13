@@ -1,29 +1,76 @@
 <template>
   <div>
     <Layout classPrefix="layout">
-      <Number-pad />
-      <Types />
-      <Notes />
-      <Tags :allTags.sync="tags" />
+      <Number-pad @update:value="onUpdateAmount" @submit="saveRecord" />
+      <Types :value.sync="record.type" />
+      <Notes @update:value="onUpdateNotes" />
+      <Tags :allTags.sync="tags" @update:value="onUpdateTags" />
     </Layout>
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from "vue";
+import { Component, Watch } from "vue-property-decorator";
 import Tags from "@/components/Money/Tags.vue";
 import NumberPad from "@/components/Money/NumberPad.vue";
 import Types from "@/components/Money/Types.vue";
 import Notes from "@/components/Money/Notes.vue";
 
-export default {
-  name: "Money",
-  components: { Tags, NumberPad, Types, Notes },
-  data() {
-    return {
-      tags: ["衣", "食", "住", "行"],
-    };
-  },
+// 数据迁移（迁移可复用）
+// const version = window.localStorage.getItem("version") || "0";
+// const recordList: Record[] = JSON.parse(
+//   window.localStorage.getItem("recordList") || ""
+// );
+// window.localStorage.getItem("version");
+// if (version === "1.0.0") {
+//   recordList.forEach((record) => {
+//     record.createdAt = new Date(0);
+//   });
+//   window.localStorage.setItem("recordList", JSON.stringify(recordList));
+// }
+// window.localStorage.setItem("version", "1.0.1");
+
+type Record = {
+  tags: string[];
+  notes: string;
+  type: string;
+  amount: number;
+  createdAt?: Date; // 类 || 构造函数
 };
+
+@Component({
+  components: { Tags, NumberPad, Types, Notes },
+})
+export default class Money extends Vue {
+  tags = ["衣", "食", "住", "行"];
+  recordList: Record[] = JSON.parse(
+    window.localStorage.getItem("recordList") || ""
+  );
+  record: Record = { tags: [], notes: "", type: "-", amount: 0 };
+
+  onUpdateTags(tags: string[]) {
+    this.record.tags = tags;
+  }
+  onUpdateNotes(notes: string) {
+    this.record.notes = notes;
+  }
+  onUpdateAmount(amount: string) {
+    this.record.amount = parseFloat(amount);
+  }
+
+  saveRecord() {
+    const record2 = JSON.parse(JSON.stringify(this.record));
+    record2.createdAt = new Date();
+    this.recordList.push(record2);
+    console.log(this.recordList);
+  }
+
+  @Watch("recordList")
+  onRecordListChange() {
+    window.localStorage.setItem("recordList", JSON.stringify(this.recordList));
+  }
+}
 </script>
 
 <style lang="scss">

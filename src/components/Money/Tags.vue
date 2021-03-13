@@ -32,14 +32,15 @@ export default class Tags extends Vue {
     } else {
       this.selectedTags.push(tag);
     }
+    this.$emit("update:value", this.selectedTags);
   }
 
   create() {
+    // 处理点击取消的情况！！！！
     const name = window.prompt("请输入标签名") as string;
     if (name.trim() === "") {
       window.alert("标签名不能为空");
     } else if (this.allTags) {
-      console.log(this.allTags, name);
       if (this.allTags.indexOf(name) >= 0) {
         window.alert("此标签名重复");
       } else {
