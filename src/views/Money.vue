@@ -16,10 +16,10 @@ import Tags from "@/components/Money/Tags.vue";
 import NumberPad from "@/components/Money/NumberPad.vue";
 import Types from "@/components/Money/Types.vue";
 import Notes from "@/components/Money/Notes.vue";
-
+import model from "@/model";
 // 数据迁移（迁移可复用）
 // const version = window.localStorage.getItem("version") || "0";
-// const recordList: Record[] = JSON.parse(
+// const recordList: RecordItem[] = JSON.parse(
 //   window.localStorage.getItem("recordList") || ""
 // );
 // window.localStorage.getItem("version");
@@ -31,23 +31,15 @@ import Notes from "@/components/Money/Notes.vue";
 // }
 // window.localStorage.setItem("version", "1.0.1");
 
-type Record = {
-  tags: string[];
-  notes: string;
-  type: string;
-  amount: number;
-  createdAt?: Date; // 类 || 构造函数
-};
+const recordList = model.fetch();
 
 @Component({
   components: { Tags, NumberPad, Types, Notes },
 })
 export default class Money extends Vue {
   tags = ["衣", "食", "住", "行"];
-  recordList: Record[] = JSON.parse(
-    window.localStorage.getItem("recordList") || ""
-  );
-  record: Record = { tags: [], notes: "", type: "-", amount: 0 };
+  recordList: RecordItem[] = recordList;
+  record: RecordItem = { tags: [], notes: "", type: "-", amount: 0 };
 
   onUpdateTags(tags: string[]) {
     this.record.tags = tags;
@@ -60,6 +52,7 @@ export default class Money extends Vue {
   }
 
   saveRecord() {
+    // 简单深拷贝
     const record2 = JSON.parse(JSON.stringify(this.record));
     record2.createdAt = new Date();
     this.recordList.push(record2);
@@ -68,7 +61,7 @@ export default class Money extends Vue {
 
   @Watch("recordList")
   onRecordListChange() {
-    window.localStorage.setItem("recordList", JSON.stringify(this.recordList));
+    model.save(this.recordList);
   }
 }
 </script>
