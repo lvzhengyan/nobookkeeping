@@ -50,7 +50,7 @@ export default class NumberPad extends Vue {
   }
 
   deleteContent() {
-    if (this.output === "1") {
+    if (this.output.length === 1) {
       this.output = "0";
     } else {
       this.output = this.output.slice(0, -1);
