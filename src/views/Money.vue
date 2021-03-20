@@ -39,13 +39,12 @@ import tagListModel from "@/models/tagListModel";
 // window.localStorage.setItem("version", "1.0.1");
 
 const recordList = recordListModel.fetch();
-const tagList = tagListModel.fetch();
 
 @Component({
   components: { Tags, NumberPad, Types, Notes },
 })
 export default class Money extends Vue {
-  tags = tagList;
+  tags = window.tagList;
   recordList: RecordItem[] = recordList;
   record: RecordItem = { tags: [], notes: "", type: "-", amount: 0 };
 
@@ -60,11 +59,7 @@ export default class Money extends Vue {
   }
 
   saveRecord() {
-    // 简单深拷贝
-    const record2 = JSON.parse(JSON.stringify(this.record));
-    record2.createdAt = new Date();
-    this.recordList.push(record2);
-    console.log(this.recordList);
+    recordListModel.create(this.record);
   }
 
   @Watch("recordList")
