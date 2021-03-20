@@ -3,7 +3,13 @@
     <Layout classPrefix="layout">
       <Number-pad @update:value="onUpdateAmount" @submit="saveRecord" />
       <Types :value.sync="record.type" />
-      <Notes @update:value="onUpdateNotes" />
+      <div class="note">
+        <Notes
+          field-name="备注"
+          placeholder="在这里输入备注"
+          @update:value="onUpdateNotes"
+        />
+      </div>
       <Tags :allTags.sync="tags" @update:value="onUpdateTags" />
     </Layout>
   </div>
@@ -15,7 +21,7 @@ import { Component, Watch } from "vue-property-decorator";
 import Tags from "@/components/Money/Tags.vue";
 import NumberPad from "@/components/Money/NumberPad.vue";
 import Types from "@/components/Money/Types.vue";
-import Notes from "@/components/Money/Notes.vue";
+import Notes from "@/components/Money/Input.vue";
 import recordListModel from "@/models/recordListModel";
 import tagListModel from "@/models/tagListModel";
 // 数据迁移（迁移可复用）
@@ -72,6 +78,10 @@ export default class Money extends Vue {
 .layout-content {
   display: flex;
   flex-direction: column-reverse;
+}
+
+.note {
+  padding: 12px 0;
 }
 </style>
 <style lang="scss" scoped>

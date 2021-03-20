@@ -1,13 +1,29 @@
 <template>
-  <Layout> 编辑标签 </Layout>
+  <Layout>
+    <div class="navBar">
+      <Icon class="leftIcon" name="left" />
+      <span class="title">编辑标签</span>
+      <span class="rightIcon"></span>
+    </div>
+    <div class="form-wrapper">
+      <Notes field-name="标签名" placeholder="请输入标签名" />
+    </div>
+    <div class="button-wrapper">
+      <Button>删除按钮</Button>
+    </div>
+  </Layout>
 </template>
 
 <script lang="ts">
 import tagListModel from "@/models/tagListModel";
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
+import Notes from "@/components/Money/Input.vue";
+import Button from "@/components/Button.vue";
 
-@Component
+@Component({
+  components: { Notes: Notes, Button: Button },
+})
 export default class EditLabels extends Vue {
   created() {
     // $route 获取路由相关信息
@@ -25,5 +41,35 @@ export default class EditLabels extends Vue {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.navBar {
+  text-align: center;
+  font-size: 16px;
+  padding: 12px 16px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  > .title {
+  }
+  > .leftIcon {
+    width: 24px;
+    height: 24px;
+  }
+  > .rightIcon {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.form-wrapper {
+  background-color: white;
+  margin-top: 10px;
+}
+
+.button-wrapper {
+  text-align: center;
+  padding: 16px;
+  margin-top: 44-16px;
+}
 </style>
