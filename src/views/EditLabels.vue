@@ -21,41 +21,37 @@
 </template>
 
 <script lang="ts">
-import tagListModel from "@/models/tagListModel";
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import Notes from "@/components/Money/Input.vue";
 import Button from "@/components/Button.vue";
+import store from "@/store/index-self";
 
 @Component({
   components: { Notes: Notes, Button: Button },
 })
 export default class EditLabels extends Vue {
-  tag?: { id: string; name: string } = undefined;
+  tag?: Tag = undefined;
 
   created() {
-    // $route 获取路由相关信息
-    const id = this.$route.params.id;
-    tagListModel.fetch();
-    const tags = tagListModel.data;
-    const tag = tags.filter((item) => item.id === id)[0];
-    if (tag) {
-      this.tag = tag;
-    } else {
-      // $router 路由器，做转发
+    this.tag = store.findTag(this.$route.params.id);
+    if (!this.tag) {
       this.$router.replace("/404");
     }
   }
+
   updateTag(name: string) {
     if (this.tag) {
-      tagListModel.update(this.tag.id, name);
+      store.updateTag(this.tag.id, name);
     }
   }
 
   remove() {
     if (this.tag) {
-      if (tagListModel.remove(this.tag.id)) {
+      if (store.removeTag(this.tag.id)) {
         this.$router.back();
+      } else {
+        window.alert("删除失败");
       }
     }
   }

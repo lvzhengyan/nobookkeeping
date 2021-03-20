@@ -7,7 +7,7 @@ type Tag = {
 type TagListModel = {
     data: Tag[];
     fetch: () => Tag[];
-    create: (name: string) => number;
+    create: (name: string) => 'duplicated' | 'success';
     update: (id: string, name: string) => 'success' | 'not found' | 'duplicated';
     save: () => void;
     remove: (id: string) => boolean;
@@ -21,12 +21,11 @@ const tagListModel: TagListModel = {
 
     create(name: string) {
         const id = createId().toString();
-        // 0 表示成功， 1 表示标签名重复
         const names = this.data.map(item => item.name);
-        if (names.indexOf(name) >= 0) { return 1 }
+        if (names.indexOf(name) >= 0) { return 'duplicated' }
         this.data.push({ id, name: name });
         this.save();
-        return 0;
+        return 'success';
     },
 
     update(id, name) {

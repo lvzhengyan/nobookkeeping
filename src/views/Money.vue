@@ -22,8 +22,7 @@ import Tags from "@/components/Money/Tags.vue";
 import NumberPad from "@/components/Money/NumberPad.vue";
 import Types from "@/components/Money/Types.vue";
 import Notes from "@/components/Money/Input.vue";
-import recordListModel from "@/models/recordListModel";
-import tagListModel from "@/models/tagListModel";
+import store from "@/store/index-self";
 // 数据迁移（迁移可复用）
 // const version = window.localStorage.getItem("version") || "0";
 // const recordList: RecordItem[] = JSON.parse(
@@ -38,14 +37,12 @@ import tagListModel from "@/models/tagListModel";
 // }
 // window.localStorage.setItem("version", "1.0.1");
 
-const recordList = recordListModel.fetch();
-
 @Component({
   components: { Tags, NumberPad, Types, Notes },
 })
 export default class Money extends Vue {
-  tags = window.tagList;
-  recordList: RecordItem[] = recordList;
+  tags = store.tagList;
+  recordList = store.recordList;
   record: RecordItem = { tags: [], notes: "", type: "-", amount: 0 };
 
   onUpdateTags(tags: string[]) {
@@ -59,12 +56,7 @@ export default class Money extends Vue {
   }
 
   saveRecord() {
-    recordListModel.create(this.record);
-  }
-
-  @Watch("recordList")
-  onRecordListChange() {
-    recordListModel.save(this.recordList);
+    store.createRecord(this.record);
   }
 }
 </script>

@@ -13,7 +13,7 @@
         </router-link>
       </div>
       <div class="wrapper">
-        <Button class="createTag" @click.native="createTag">新建标签</Button>
+        <Button class="createTag" @click.native="create">新建标签</Button>
       </div>
     </Layout>
   </div>
@@ -22,24 +22,19 @@
 <script lang="ts">
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
-import tagListModel from "@/models/tagListModel";
 import Button from "@/components/Button.vue";
+import store from "@/store/index-self";
 
 @Component({
   components: { Button: Button },
 })
 export default class Labels extends Vue {
-  tags = window.tagList;
+  tags = store.tagList;
 
-  createTag() {
+  create() {
     const name = window.prompt("请输入标签名：");
     if (name) {
-      const errorCode = tagListModel.create(name);
-      if (errorCode === 1) {
-        window.alert("输入的标签名重复");
-      } else if (errorCode === 0) {
-        window.alert("添加成功");
-      }
+      store.createTag(name);
     }
   }
 }

@@ -19,6 +19,7 @@
 <script lang="ts">
 import Vue from "vue";
 import { Component, Prop } from "vue-property-decorator";
+import store from "@/store/index-self";
 
 @Component
 export default class Tags extends Vue {
@@ -37,15 +38,9 @@ export default class Tags extends Vue {
 
   create() {
     // 处理点击取消的情况！！！！
-    const name = window.prompt("请输入标签名") as string;
-    if (name.trim() === "") {
-      window.alert("标签名不能为空");
-    } else if (this.allTags) {
-      if (this.allTags.indexOf(name) >= 0) {
-        window.alert("此标签名重复");
-      } else {
-        this.$emit("update:allTags", [...this.allTags, name]);
-      }
+    const name = window.prompt("请输入标签名");
+    if (name) {
+      store.createTag(name);
     }
   }
 }
