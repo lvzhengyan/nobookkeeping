@@ -6,11 +6,11 @@
     <ul class="current">
       <li
         v-for="tag in allTags"
-        :key="tag"
+        :key="tag.id"
         @click="select(tag)"
         :class="{ selected: selectedTags.indexOf(tag) >= 0 }"
       >
-        {{ tag }}
+        {{ tag.name }}
       </li>
     </ul>
   </div>
