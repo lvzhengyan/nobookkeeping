@@ -1,18 +1,16 @@
 <template>
-  <div>
-    <Layout classPrefix="layout">
-      <Number-pad @submit="saveRecord" />
-      <Types :value.sync="record.type" />
-      <div class="note">
-        <Notes
-          field-name="备注"
-          placeholder="在这里输入备注"
-          @update:value="onUpdateNotes"
-        />
-      </div>
-      <Tags />
-    </Layout>
-  </div>
+  <Layout classPrefix="layout">
+    <Number-pad @submit="saveRecord" />
+    <Tabs :data-source="recordTypeList" :value.sync="record.type" />
+    <div class="note">
+      <Notes
+        field-name="备注"
+        placeholder="在这里输入备注"
+        @update:value="onUpdateNotes"
+      />
+    </div>
+    <Tags />
+  </Layout>
 </template>
 
 <script lang="ts">
@@ -20,17 +18,19 @@ import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import Tags from "@/components/Money/Tags.vue";
 import NumberPad from "@/components/Money/NumberPad.vue";
-import Types from "@/components/Money/Types.vue";
 import Notes from "@/components/Money/Input.vue";
+import Tabs from "@/components/Tabs.vue";
+import recordTypeList from "@/constants/recordTypeList";
 
 @Component({
-  components: { Tags, NumberPad, Types, Notes },
+  components: { Tags, NumberPad, Notes, Tabs },
 })
 export default class Money extends Vue {
   get recordList() {
     return this.$store.state.recordList;
   }
 
+  recordTypeList = recordTypeList;
   record: RecordItem = { tags: [], notes: "", type: "-", amount: 0 };
 
   created() {
@@ -47,15 +47,12 @@ export default class Money extends Vue {
 }
 </script>
 
-<style lang="scss">
-.layout-content {
+<style lang="scss" scoped>
+::v-deep .layout-content {
   display: flex;
   flex-direction: column-reverse;
 }
-
-.note {
+.notes {
   padding: 12px 0;
 }
-</style>
-<style lang="scss" scoped>
 </style>
