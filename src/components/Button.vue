@@ -1,5 +1,5 @@
 <template>
-  <button class="button">
+  <button class="button" @click="$emit('click', $event)">
     <slot />
   </button>
 </template>
@@ -20,5 +20,10 @@ export default class Button extends Vue {}
   color: white;
   border-radius: 4px;
   border: none;
+  &-wrapper {
+    text-align: center;
+    padding: 16px;
+    margin-top: 44-16px;
+  }
 }
 </style>

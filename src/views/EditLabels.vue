@@ -1,12 +1,12 @@
 <template>
   <Layout>
     <div class="navBar">
-      <Icon class="leftIcon" name="left" @click.native="goback" />
+      <Icon class="leftIcon" name="left" @click="goBack" />
       <span class="title">编辑标签</span>
-      <span class="rightIcon"></span>
+      <span class="rightIcon" />
     </div>
     <div class="form-wrapper">
-      <Notes
+      <FormItem
         :value="currentTag.name"
         @update:value="update"
         field-name="标签名"
@@ -14,7 +14,7 @@
       />
     </div>
     <div class="button-wrapper">
-      <Button @click.native="remove">删除按钮</Button>
+      <Button @click="remove">删除标签</Button>
     </div>
   </Layout>
 </template>
@@ -22,17 +22,15 @@
 <script lang="ts">
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
-import Notes from "@/components/Money/Input.vue";
+import FormItem from "@/components/Money/FormItem.vue";
 import Button from "@/components/Button.vue";
-
 @Component({
-  components: { Notes, Button },
+  components: { Button, FormItem },
 })
-export default class EditLabels extends Vue {
+export default class EditLabel extends Vue {
   get currentTag() {
     return this.$store.state.currentTag;
   }
-
   created() {
     const id = this.$route.params.id;
     this.$store.commit("fetchTags");
@@ -41,23 +39,20 @@ export default class EditLabels extends Vue {
       this.$router.replace("/404");
     }
   }
-
   update(name: string) {
     if (this.currentTag) {
       this.$store.commit("updateTag", {
         id: this.currentTag.id,
-        name: name,
+        name,
       });
     }
   }
-
   remove() {
     if (this.currentTag) {
       this.$store.commit("removeTag", this.currentTag.id);
     }
   }
-
-  goback() {
+  goBack() {
     this.$router.back();
   }
 }
@@ -68,7 +63,7 @@ export default class EditLabels extends Vue {
   text-align: center;
   font-size: 16px;
   padding: 12px 16px;
-  background-color: white;
+  background: white;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -81,12 +76,10 @@ export default class EditLabels extends Vue {
     height: 24px;
   }
 }
-
 .form-wrapper {
-  background-color: white;
-  margin-top: 10px;
+  background: white;
+  margin-top: 8px;
 }
-
 .button-wrapper {
   text-align: center;
   padding: 16px;

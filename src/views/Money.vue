@@ -1,9 +1,9 @@
 <template>
-  <Layout classPrefix="layout">
-    <Number-pad @submit="saveRecord" />
+  <Layout class-prefix="layout">
+    <NumberPad :value.sync="record.amount" @submit="saveRecord" />
     <Tabs :data-source="recordTypeList" :value.sync="record.type" />
-    <div class="note">
-      <Notes
+    <div class="notes">
+      <FormItem
         field-name="备注"
         placeholder="在这里输入备注"
         @update:value="onUpdateNotes"
@@ -15,32 +15,32 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { Component } from "vue-property-decorator";
-import Tags from "@/components/Money/Tags.vue";
 import NumberPad from "@/components/Money/NumberPad.vue";
-import Notes from "@/components/Money/Input.vue";
+import FormItem from "@/components/Money/FormItem.vue";
+import Tags from "@/components/Money/Tags.vue";
+import { Component } from "vue-property-decorator";
 import Tabs from "@/components/Tabs.vue";
 import recordTypeList from "@/constants/recordTypeList";
-
 @Component({
-  components: { Tags, NumberPad, Notes, Tabs },
+  components: { Tabs, Tags, FormItem, NumberPad },
 })
 export default class Money extends Vue {
   get recordList() {
     return this.$store.state.recordList;
   }
-
   recordTypeList = recordTypeList;
-  record: RecordItem = { tags: [], notes: "", type: "-", amount: 0 };
-
+  record: RecordItem = {
+    tags: [],
+    notes: "",
+    type: "-",
+    amount: 0,
+  };
   created() {
     this.$store.commit("fetchRecords");
   }
-
-  onUpdateNotes(notes: string) {
-    this.record.notes = notes;
+  onUpdateNotes(value: string) {
+    this.record.notes = value;
   }
-
   saveRecord() {
     this.$store.commit("createRecord", this.record);
   }
