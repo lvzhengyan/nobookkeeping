@@ -1,7 +1,7 @@
 <template>
   <div>
     <label class="formItem">
-      <span class="title">{{ fieldName }}</span>
+      <span class="notes-text">{{ fieldName }}</span>
       <input
         :value="value"
         @input="onValueChange($event.target.value)"
